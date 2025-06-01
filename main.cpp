@@ -3,9 +3,11 @@
 #include <string>
 #include <vector>
 #include <limits> // Nécessaire pour std::numeric_limits
+#include <chrono> // For benchmarking time
 
 // Fonction pour simuler la Fourmilière 0
-void run_colony0() {
+void run_colony0()
+{
     std::cout << "\n--- Fourmilière 0 ---" << std::endl;
     Colony colony0;
     colony0.addRoom("Sv", 2);
@@ -19,11 +21,17 @@ void run_colony0() {
     colony0.addTunnel("S2", "Sd");
     colony0.addAnts(2);
     colony0.computePaths();
+
+    auto start = std::chrono::high_resolution_clock::now();
     colony0.simulateSteps();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Temps de simulation : " << duration.count() << " microsecondes.\n";
 }
 
 // Fonction pour simuler la Fourmilière 1
-void run_colony1() {
+void run_colony1()
+{
     std::cout << "\n--- Fourmilière 1 ---" << std::endl;
     Colony colony1;
     colony1.addRoom("Sv", 5);
@@ -36,11 +44,17 @@ void run_colony1() {
     colony1.addTunnel("S2", "Sd");
     colony1.addAnts(5);
     colony1.computePaths();
+
+    auto start = std::chrono::high_resolution_clock::now();
     colony1.simulateSteps();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Temps de simulation : " << duration.count() << " microsecondes.\n";
 }
 
 // Fonction pour simuler la Fourmilière 2
-void run_colony2() {
+void run_colony2()
+{
     std::cout << "\n--- Fourmilière 2 ---" << std::endl;
     Colony colony2;
     colony2.addRoom("Sv", 5);
@@ -54,11 +68,17 @@ void run_colony2() {
     colony2.addTunnel("Sd", "Sv");
     colony2.addAnts(5);
     colony2.computePaths();
+
+    auto start = std::chrono::high_resolution_clock::now();
     colony2.simulateSteps();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Temps de simulation : " << duration.count() << " microsecondes.\n";
 }
 
 // Fonction pour simuler la Fourmilière 3
-void run_colony3() {
+void run_colony3()
+{
     std::cout << "\n--- Fourmilière 3 ---" << std::endl;
     Colony colony3;
     colony3.addRoom("Sv", 5);
@@ -75,11 +95,17 @@ void run_colony3() {
     colony3.addTunnel("S2", "S3");
     colony3.addAnts(5);
     colony3.computePaths();
+
+    auto start = std::chrono::high_resolution_clock::now();
     colony3.simulateSteps();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Temps de simulation : " << duration.count() << " microsecondes.\n";
 }
 
 // Fonction pour simuler la Fourmilière 4
-void run_colony4() {
+void run_colony4()
+{
     std::cout << "\n--- Fourmilière 4 ---" << std::endl;
     Colony colony4;
     colony4.addRoom("Sv", 10);
@@ -102,11 +128,17 @@ void run_colony4() {
     colony4.addTunnel("S1", "S3");
     colony4.addAnts(10);
     colony4.computePaths();
+
+    auto start = std::chrono::high_resolution_clock::now();
     colony4.simulateSteps();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Temps de simulation : " << duration.count() << " microsecondes.\n";
 }
 
 // Fonction pour simuler la Fourmilière 5
-void run_colony5() {
+void run_colony5()
+{
     std::cout << "\n--- Fourmilière 5 ---" << std::endl;
     Colony colony5;
     colony5.addRoom("Sv", 50);
@@ -148,14 +180,21 @@ void run_colony5() {
     colony5.addTunnel("S11", "S13");
     colony5.addAnts(50);
     colony5.computePaths();
+
+    auto start = std::chrono::high_resolution_clock::now();
     colony5.simulateSteps();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Temps de simulation : " << duration.count() << " microsecondes.\n";
 }
 
-int main() {
+int main()
+{
     int choice;
     std::cout << "Simulation de fourmilières" << std::endl;
 
-    while (true) {
+    while (true)
+    {
         std::cout << "\nChoisissez une fourmilière à simuler :" << std::endl;
         std::cout << "  0: Fourmilière 0" << std::endl;
         std::cout << "  1: Fourmilière 1" << std::endl;
@@ -166,35 +205,37 @@ int main() {
         std::cout << "  Entrez tout autre nombre pour quitter." << std::endl;
         std::cout << "Votre choix : ";
 
-        if (!(std::cin >> choice)) {
+        if (!(std::cin >> choice))
+        {
             std::cout << "Entrée invalide. Veuillez entrer un nombre." << std::endl;
-            std::cin.clear(); // Efface les indicateurs d'erreur
+            std::cin.clear();                                                   // Efface les indicateurs d'erreur
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore le reste de la ligne incorrecte
-            continue; // Redemande une entrée
+            continue;                                                           // Redemande une entrée
         }
 
-        switch (choice) {
-            case 0:
-                run_colony0();
-                break;
-            case 1:
-                run_colony1();
-                break;
-            case 2:
-                run_colony2();
-                break;
-            case 3:
-                run_colony3();
-                break;
-            case 4:
-                run_colony4();
-                break;
-            case 5:
-                run_colony5();
-                break;
-            default:
-                std::cout << "Fin de la simulation. Au revoir !" << std::endl;
-                return 0; // Quitte le programme
+        switch (choice)
+        {
+        case 0:
+            run_colony0();
+            break;
+        case 1:
+            run_colony1();
+            break;
+        case 2:
+            run_colony2();
+            break;
+        case 3:
+            run_colony3();
+            break;
+        case 4:
+            run_colony4();
+            break;
+        case 5:
+            run_colony5();
+            break;
+        default:
+            std::cout << "Fin de la simulation. Au revoir !" << std::endl;
+            return 0; // Quitte le programme
         }
         std::cout << "\n----------------------------------------\n"; // Séparateur après une simulation
     }
