@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisation Fourmilière</title>
+    <style>
+        body { margin: 20px; font-family: sans-serif; }
+        canvas { border: 1px solid black; margin-top: 10px; }
+        .controls { margin-bottom: 10px; }
+        .controls button { margin-right: 5px; padding: 5px 10px; }
+        .animation-controls { margin-top: 10px; margin-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <h1>Visualisation de la fourmilière</h1>
+
+    <div class="controls">
+        <p>Choisir une simulation à charger (état final) :</p>
+        <button onclick="loadAndDrawColony('simulation_colony0.json')">Colonie 0</button>
+        <button onclick="loadAndDrawColony('simulation_colony1.json')">Colonie 1</button>
+        <button onclick="loadAndDrawColony('simulation_colony2.json')">Colonie 2</button>
+        <button onclick="loadAndDrawColony('simulation_colony3.json')">Colonie 3</button>
+        <button onclick="loadAndDrawColony('simulation_colony4.json')">Colonie 4</button>
+        <button onclick="loadAndDrawColony('simulation_colony5.json')">Colonie 5</button>
+        <p id="loadingStatus"></p>
+    </div>
+
+    <div class="animation-controls">
+        <button id="playAnimationBtn" disabled>Démarrer l'animation</button>
+        <label for="speedControl">Vitesse:</label>
+        <select id="speedControl">
+            <option value="1000">Lente (1s/étape)</option>
+            <option value="500" selected>Normale (0.5s/étape)</option>
+            <option value="250">Rapide (0.25s/étape)</option>
+            <option value="100">Très Rapide (0.1s/étape)</option>
+        </select>
+        <span id="currentStepDisplay">Étape: -</span>
+    </div>
+
+    <canvas id="antCanvas" width="600" height="400"></canvas>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('antCanvas');
+            const ctx = canvas.getContext('2d');
+            const loadingStatus = document.getElementById('loadingStatus');
+            const playAnimationBtn = document.getElementById('playAnimationBtn');
+            const speedControl = document.getElementById('speedControl');
+            const currentStepDisplay = document.getElementById('currentStepDisplay');
+
+            let fullColonyData = null; // Pour stocker toutes les données chargées, y compris les étapes
+            let animationIntervalId = null;
+            let currentAnimationStep = 0;
+
+            function drawColony (canvasContext, data, antsDataToDraw) {
+                canvasContext.clearRect(0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
+                const findRoom = (name) => data.rooms.find(r => r.name === name);
+
+                // 1. Dessiner les salles 
+                data.rooms.forEach(room => {
+                    canvasContext.fillStyle = 'lightblue';
+                    canvasContext.fillRect(room.x, room.y, room.width, room.height);
+                    canvasContext.strokeStyle = 'blue';
+                    canvasContext.strokeRect(room.x, room.y, room.width, room.height);
+                    canvasContext.fillStyle = 'black';
+                    canvasContext.font = '14px Arial';
+                    const textMetrics = canvasContext.measureText(room.name);
+                    const textX = room.x + (room.width - textMetrics.width) / 2;
+                    const textY = room.y + room.height / 2 + 5; 
+                    canvasContext.fillText(room.name, textX, textY);
+                });
+
+                // 2. Dessiner les tunnels
+                data.tunnels.forEach(tunnel => {
+                    const roomFrom = findRoom(tunnel.from);
+                    const roomTo = findRoom(tunnel.to);
+                    if (roomFrom && roomTo) {
+                        const fromX = roomFrom.x + roomFrom.width / 2;
+                        const fromY = roomFrom.y + roomFrom.height / 2;
+                        const toX = roomTo.x + roomTo.width / 2;
+                        const toY = roomTo.y + roomTo.height / 2;
+                        canvasContext.beginPath();
+                        canvasContext.moveTo(fromX, fromY);
+                        canvasContext.lineTo(toX, toY);
+                        canvasContext.strokeStyle = 'grey';
+                        canvasContext.lineWidth = 3;
+                        canvasContext.stroke();
+                    }
+                });
+
+                // 3. Dessiner les fourmis (utilise antsDataToDraw)
+                if (antsDataToDraw && Array.isArray(antsDataToDraw)) {
+                    const antPositionsInRoom = {};
+                    antsDataToDraw.forEach(ant => {
+                        const roomName = ant.currentRoomName || ant.room; 
+                        const room = findRoom(roomName);
+                        if (room) {
+                            if (!antPositionsInRoom[room.name]) {
+                                antPositionsInRoom[room.name] = 0;
+                            }
+                            const antIndexInRoom = antPositionsInRoom[room.name]++;
+                            const antRadius = 5;
+                            const spacingFactor = 2.5;
+                            const antDiameter = antRadius * 2;
+                            const effectiveSpacing = antRadius * spacingFactor;
+
+                            let antsPerRow = Math.floor(room.width / effectiveSpacing);
+                            if (antsPerRow < 1) antsPerRow = 1;
+
+                            const col = antIndexInRoom % antsPerRow;
+                            const row = Math.floor(antIndexInRoom / antsPerRow);
+
+                            const totalWidthOfAntsOnRow = Math.min(antIndexInRoom + 1, antsPerRow) * antDiameter + Math.max(0, Math.min(antIndexInRoom + 1, antsPerRow) - 1) * (effectiveSpacing - antDiameter);
+                            let startX = room.x + (room.width - totalWidthOfAntsOnRow) / 2 + antRadius;
+                             if (antsPerRow === 1 && (antIndexInRoom + 1 > antsPerRow)) { 
+                                startX = room.x + room.width / 2;
+                            } else if (antsPerRow === 1) {
+                                startX = room.x + room.width / 2;
+                            }
+
+                            const antX = startX + col * effectiveSpacing;
+                            const startY = room.y + antRadius + 10;
+                            const antY = startY + row * effectiveSpacing;
+                            
+                            if (antY + antRadius > room.y + room.height) {
+                                // Gérer le débordement si nécessaire
+                            }
+
+                            canvasContext.beginPath();
+                            canvasContext.arc(antX, antY, antRadius, 0, 2 * Math.PI);
+                            canvasContext.fillStyle = 'red';
+                            canvasContext.fill();
+                            canvasContext.strokeStyle = 'darkred';
+                            canvasContext.stroke();
+                        }
+                    });
+                } else {
+                    // Ne pas afficher d'avertissement si c'est intentionnel (par ex. avant le début de l'animation)
+                }
+            }
+
+            window.loadAndDrawColony = async function(fileName) {
+                loadingStatus.textContent = `Chargement de ${fileName}...`;
+                currentStepDisplay.textContent = "Étape: -";
+                playAnimationBtn.disabled = true;
+                if (animationIntervalId) {
+                    clearInterval(animationIntervalId);
+                    animationIntervalId = null;
+                }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                try {
+                    const response = await fetch(fileName);
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP: ${response.status} lors du chargement de ${fileName}`);
+                    }
+                    fullColonyData = await response.json(); 
+                    console.log("Données chargées:", fullColonyData); 
+                    if (fullColonyData.simulation_steps) {
+                        console.log("Étapes de simulation:", fullColonyData.simulation_steps); 
+                        if (fullColonyData.simulation_steps.length > 0) {
+                            console.log("Première étape:", fullColonyData.simulation_steps[0]); 
+                        }
+                    }
+                    
+                    if (fullColonyData.ants) { 
+                        drawColony(ctx, fullColonyData, fullColonyData.ants);
+                        loadingStatus.textContent = `${fileName} chargée (état final). Prêt pour l'animation.`;
+                    } else if (fullColonyData.simulation_steps && fullColonyData.simulation_steps.length > 0) {
+                        // MODIFICATION ICI: Utiliser .ants au lieu de .ants_at_step
+                        drawColony(ctx, fullColonyData, fullColonyData.simulation_steps[0].ants);
+                        loadingStatus.textContent = `${fileName} chargée (étape 0). Prêt pour l'animation.`;
+                    } else {
+                         drawColony(ctx, fullColonyData, []); 
+                         loadingStatus.textContent = `${fileName} chargée. Pas de données de fourmis ou d'étapes de simulation.`;
+                    }
+
+                    if (fullColonyData.simulation_steps && fullColonyData.simulation_steps.length > 0) {
+                        playAnimationBtn.disabled = false;
+                    } else {
+                        loadingStatus.textContent += " Aucune étape de simulation trouvée pour l'animation.";
+                    }
+                } catch (error) {
+                    console.error('Erreur lors du chargement ou du dessin de la colonie:', error);
+                    loadingStatus.textContent = `Erreur: ${error.message}. Vérifiez la console.`;
+                    ctx.fillStyle = 'red';
+                    ctx.font = '16px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Erreur chargement: ${fileName}`, canvas.width / 2, canvas.height / 2);
+                    ctx.textAlign = 'left'; 
+                    fullColonyData = null;
+                }
+            }
+
+            function animateStep() {
+                console.log("animateStep appelée, currentAnimationStep:", currentAnimationStep); 
+                if (!fullColonyData || !fullColonyData.simulation_steps || fullColonyData.simulation_steps.length === 0) {
+                    clearInterval(animationIntervalId);
+                    animationIntervalId = null;
+                    playAnimationBtn.textContent = "Démarrer l'animation";
+                    playAnimationBtn.disabled = true; // Peut-être le laisser activé pour "Rejouer"
+                    return;
+                }
+
+                const stepData = fullColonyData.simulation_steps[currentAnimationStep];
+                console.log("Données de l'étape actuelle (stepData):", stepData); 
+                if (stepData) {
+                    // MODIFICATION ICI: Utiliser stepData.ants et stepData.step
+                    drawColony(ctx, fullColonyData, stepData.ants);
+                    currentStepDisplay.textContent = `Étape: ${stepData.step}`; // Changé de step_number à step
+                    currentAnimationStep++;
+                    if (currentAnimationStep >= fullColonyData.simulation_steps.length) {
+                        clearInterval(animationIntervalId);
+                        animationIntervalId = null;
+                        playAnimationBtn.textContent = "Rejouer l'animation";
+                        loadingStatus.textContent = "Animation terminée.";
+                    }
+                } else {
+                    clearInterval(animationIntervalId);
+                    animationIntervalId = null;
+                    playAnimationBtn.textContent = "Démarrer l'animation";
+                    loadingStatus.textContent = "Fin des étapes d'animation.";
+                }
+            }
+
+            playAnimationBtn.addEventListener('click', () => {
+                if (animationIntervalId) { // Si l'animation est en cours -> Pause
+                    clearInterval(animationIntervalId);
+                    animationIntervalId = null;
+                    playAnimationBtn.textContent = "Reprendre l'animation";
+                    loadingStatus.textContent = `Animation en pause à l'étape ${currentAnimationStep > 0 ? fullColonyData.simulation_steps[currentAnimationStep-1].step_number : 0}.`;
+                } else { // Démarrer ou reprendre
+                    if (!fullColonyData || !fullColonyData.simulation_steps || fullColonyData.simulation_steps.length === 0) {
+                        loadingStatus.textContent = "Chargez d'abord une simulation avec des étapes.";
+                        return;
+                    }
+                    if (currentAnimationStep >= fullColonyData.simulation_steps.length) {
+                        currentAnimationStep = 0; // Recommencer si à la fin
+                    }
+                    playAnimationBtn.textContent = "Pause";
+                    loadingStatus.textContent = "Animation en cours...";
+                    const speed = parseInt(speedControl.value, 10);
+                    animationIntervalId = setInterval(animateStep, speed);
+                }
+            });
+            
+            loadingStatus.textContent = "Prêt. Choisissez une simulation à charger.";
+        });
+    </script>
+</body>
+</html>

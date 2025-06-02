@@ -1,0 +1,374 @@
+{
+    "ants": [
+        {
+            "currentRoomName": "Sd",
+            "id": "f1"
+        },
+        {
+            "currentRoomName": "Sd",
+            "id": "f2"
+        },
+        {
+            "currentRoomName": "Sd",
+            "id": "f3"
+        },
+        {
+            "currentRoomName": "Sd",
+            "id": "f4"
+        },
+        {
+            "currentRoomName": "Sd",
+            "id": "f5"
+        }
+    ],
+    "rooms": [
+        {
+            "capacity": 1,
+            "height": 60,
+            "name": "S1",
+            "width": 80,
+            "x": 160,
+            "y": 50
+        },
+        {
+            "capacity": 1,
+            "height": 60,
+            "name": "S2",
+            "width": 80,
+            "x": 250,
+            "y": 50
+        },
+        {
+            "capacity": 5,
+            "height": 100,
+            "name": "Sd",
+            "width": 100,
+            "x": 340,
+            "y": 50
+        },
+        {
+            "capacity": 5,
+            "height": 100,
+            "name": "Sv",
+            "width": 100,
+            "x": 50,
+            "y": 50
+        }
+    ],
+    "simulation_steps": [
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 0
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "S1",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 1
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "S2",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 2
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "S1",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 3
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "S2",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 4
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "S1",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 5
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "S2",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 6
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "S1",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 7
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "S2",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sv",
+                    "id": "f5"
+                }
+            ],
+            "step": 8
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "S1",
+                    "id": "f5"
+                }
+            ],
+            "step": 9
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "S2",
+                    "id": "f5"
+                }
+            ],
+            "step": 10
+        },
+        {
+            "ants": [
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f1"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f2"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f3"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f4"
+                },
+                {
+                    "currentRoomName": "Sd",
+                    "id": "f5"
+                }
+            ],
+            "step": 11
+        }
+    ],
+    "tunnels": [
+        {
+            "from": "S1",
+            "to": "Sv"
+        },
+        {
+            "from": "S1",
+            "to": "S2"
+        },
+        {
+            "from": "S2",
+            "to": "Sd"
+        }
+    ]
+}
